@@ -104,6 +104,11 @@ def generate_frequency_maps(bins=128, planes=PLANE_MAP, Sigma=None,
         Sigma_2x2 = Sigma[np.ix_([i, j], [i, j])]
         freq_maps[plane] = gaussian_2d_density(X, Y, Sigma_2x2)
 
+    all_values = np.concatenate([f.ravel() for f in freq_maps.values()])
+    vmin, vmax = all_values.min(), all_values.max()
+    for plane in planes:
+        freq_maps[plane] = (freq_maps[plane] - vmin) / (vmax - vmin)
+
     return freq_maps, Sigma, X, Y
 
 # --------------------------
